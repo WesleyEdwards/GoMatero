@@ -1,4 +1,3 @@
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   Alert,
   Button,
@@ -6,7 +5,6 @@ import {
   CardContent,
   Container,
   Divider,
-  IconButton,
   Stack,
   TextField,
   Typography,
@@ -15,18 +13,17 @@ import React, { FC, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UnAuthContext } from "../context/UnAuthContext";
 
-export const CreateAccount: FC = () => {
+export const SignIn: FC = () => {
   const { setUser, api } = useContext(UnAuthContext);
-  // const navigate = useNavigate();
-  const [name, setName] = useState<string>("");
+  const navigation = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>();
 
-  const handleSubmit = () => {
+  const handleSignIn = () => {
     setError(undefined);
-    if (!(email && password && name)) {
-      setError("Please enter all fields");
+    if (!email || !password) {
+      setError("Please enter an email and password");
       return;
     }
     if (email.indexOf("@") === -1) {
@@ -34,41 +31,26 @@ export const CreateAccount: FC = () => {
       return;
     }
 
-    api.createUser(email, password, name).then((user) => {
+    api.signIn(email, password).then((user) => {
       if (!user) {
-        setError("Invalid email or password");
+        setError("An error occurred");
         return;
       }
       setUser(user);
+      navigation("/");
     });
   };
 
-  // const switchToLogin = () => navigate("/sign-in");
+  const navCreateAccount = () => navigation("/create-account");
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{ pt: 8 }}>
       <Card>
         <CardContent>
           <Stack gap="2rem" paddingX="1rem">
-            <Stack direction="row">
-              <IconButton>
-                {/* <ArrowBackIcon onClick={switchToLogin} /> */}
-              </IconButton>
-              <Typography
-                variant="h4"
-                textAlign="center"
-                width="100%"
-                sx={{ mr: "2rem" }}
-              >
-                Create Account
-              </Typography>
-            </Stack>
-            <TextField
-              label="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="John Doe"
-            />
+            <Typography variant="h4" textAlign="center">
+              Sign In
+            </Typography>
             <TextField
               label="Email"
               value={email}
@@ -76,25 +58,24 @@ export const CreateAccount: FC = () => {
             />
             <TextField
               label="Password"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              type="password"
             />
-
             {error && <Alert severity="error">{error}</Alert>}
 
             <Button
               variant="contained"
               size="large"
               sx={{ width: "12rem", alignSelf: "center", my: "1rem" }}
-              onClick={handleSubmit}
+              onClick={handleSignIn}
             >
-              Submit
+              Sign In
             </Button>
-
-            <Stack direction="row" gap="1rem" justifyContent="center">
-              <Divider orientation="vertical" flexItem />
-            </Stack>
+            <Divider />
+            <Button variant="text" size="small" onClick={navCreateAccount}>
+              Create Account
+            </Button>
           </Stack>
         </CardContent>
       </Card>
@@ -102,4 +83,4 @@ export const CreateAccount: FC = () => {
   );
 };
 
-export default CreateAccount;
+export default SignIn;

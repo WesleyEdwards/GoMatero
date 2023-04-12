@@ -2,6 +2,7 @@ import {
   User,
   UserInfo,
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
 import { auth } from "./firebase_sdk";
@@ -13,6 +14,14 @@ export class Api {
         return user;
       });
     });
+  }
+
+  signIn(email: string, password: string): Promise<User> {
+    return signInWithEmailAndPassword(auth, email, password).then(
+      (userCredential) => {
+        return userCredential.user;
+      }
+    );
   }
 
   private createAccount(email: string, password: string): Promise<User> {
@@ -32,7 +41,6 @@ export class Api {
       displayName: "Jane Q. User",
     })
       .then((res) => {
-        // Update successful
         return res;
       })
       .catch((error) => {});
