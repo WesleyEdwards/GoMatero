@@ -1,4 +1,3 @@
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   Alert,
   Button,
@@ -12,7 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import React, { FC, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { UnAuthContext } from "../context/UnAuthContext";
 
 export const CreateAccount: FC = () => {

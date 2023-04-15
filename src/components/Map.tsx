@@ -9,7 +9,7 @@ export const Map = () => {
 
     return ( isLoaded ? (
         <GoogleMap
-            mapContainerStyle={{width:'80vw',height:'80vh'}}
+            mapContainerStyle={{width:'98vw',height:'90vh'}}
             center = {{lat:0,lng:0}}
             zoom={10}
             onLoad={map => {
