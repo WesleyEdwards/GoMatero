@@ -2,9 +2,11 @@ import Rect, { FC, useContext, useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Button, IconButton, Popover, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContexxt";
+import { auth } from "../firebase/firebase_sdk";
 
-export const UserIcon: FC<{ auth?: boolean }> = ({ auth = false }) => {
+export const UserIcon: FC<{ authenticated?: boolean }> = ({
+  authenticated = false,
+}) => {
   const navigation = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -40,12 +42,8 @@ export const UserIcon: FC<{ auth?: boolean }> = ({ auth = false }) => {
         }}
       >
         <Stack>
-          {auth ? (
-            <Button
-              sx={{ p: 2 }}
-              variant="text"
-              onClick={() => console.log("TODO: logout")}
-            >
+          {authenticated ? (
+            <Button sx={{ p: 2 }} variant="text" onClick={() => auth.signOut()}>
               Sign Out
             </Button>
           ) : (

@@ -26,19 +26,19 @@ export const SignIn: FC = () => {
       setError("Please enter an email and password");
       return;
     }
-    if (email.indexOf("@") === -1) {
-      setError("Please enter a valid email");
-      return;
-    }
-
-    api.signIn(email, password).then((user) => {
-      if (!user) {
-        setError("An error occurred");
-        return;
-      }
-      setUser(user);
-      navigation("/");
-    });
+    api
+      .signIn(email, password)
+      .then((user) => {
+        if (!user) {
+          setError("An error occurred");
+          return;
+        }
+        setUser(user);
+        navigation("/");
+      })
+      .catch(() => {
+        setError("Incorrect email or password");
+      });
   };
 
   const navCreateAccount = () => navigation("/create-account");
