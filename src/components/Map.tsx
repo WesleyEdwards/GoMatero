@@ -23,6 +23,11 @@ export const Map = () => {
                                 lng: position.coords.longitude,
                             }; 
                             map.panTo(pos);
+                        },
+                        (err:GeolocationPositionError) => {
+                            if (err.code == err.PERMISSION_DENIED) {
+                                alert("Please Enable location to automatically pan the map to your position.");
+                            }
                         }
                     )
                 }
