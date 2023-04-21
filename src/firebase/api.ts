@@ -5,7 +5,8 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { auth } from "./firebase_sdk";
+import { auth, db } from "./firebase_sdk";
+import { addDoc, collection } from "firebase/firestore";
 
 export class Api {
   createUser(email: string, password: string, name: string): Promise<User> {
@@ -28,6 +29,7 @@ export class Api {
     return createUserWithEmailAndPassword(auth, email, password).then(
       (userCredential) => {
         userCredential.user.displayName;
+        this.createPublicProfile(userCredential.user);
         return userCredential.user;
       }
     );
@@ -45,4 +47,24 @@ export class Api {
       })
       .catch((error) => {});
   }
+
+  async createPublicProfile(user: User): Promise<PublicUser> {
+    if (!user.displayName || !user.email) return Promise.reject("No user info");
+
+    const userInfo: PublicUser = {
+      uid: user.uid,
+      name: user.displayName!,
+      email: user.email!,
+    };
+
+    const docRef = await addDoc(collection(db, "public-users"), userInfo);
+    console.log("Document written with ID: ", docRef);
+    return userInfo;
+  }
 }
+
+type PublicUser = {
+  uid: string;
+  name: string;
+  email: string;
+};
