@@ -10,7 +10,7 @@ export const Map = () => {
     return ( isLoaded ? (
         <GoogleMap
             mapContainerStyle={{width:'98vw',height:'90vh'}}
-            center = {{lat:0,lng:0}}
+            center = {{lat:41.749837,lng:-111.832160}}
             zoom={10}
             onLoad={map => {
                 const bounds = new window.google.maps.LatLngBounds();
@@ -23,6 +23,11 @@ export const Map = () => {
                                 lng: position.coords.longitude,
                             }; 
                             map.panTo(pos);
+                        },
+                        (err:GeolocationPositionError) => {
+                            if (err.code == err.PERMISSION_DENIED) {
+                                alert("Please Enable location to automatically pan the map to your position.");
+                            }
                         }
                     )
                 }
