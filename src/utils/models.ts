@@ -15,3 +15,9 @@ type MateSession = {
   image: string;
   location: LatLang;
 };
+
+export type PublicUser = {
+  uid: string;
+  name: string;
+  email: string;
+};

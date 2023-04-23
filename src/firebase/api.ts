@@ -5,16 +5,20 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { auth, db } from "./firebase_sdk";
-import { addDoc, collection } from "firebase/firestore";
+import { PUBLIC_USERS_REF, auth, db } from "./firebase_sdk";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { PublicUser } from "../utils/models";
 
 export class Api {
-  createUser(email: string, password: string, name: string): Promise<User> {
-    return this.createAccount(email, password).then((user) => {
-      return this.updateProfile(name).then(() => {
-        return user;
-      });
-    });
+  async createUser(
+    email: string,
+    password: string,
+    name: string
+  ): Promise<User> {
+    const user = await this.createAccount(email, password);
+    await this.updateProfile(name);
+    await this.createPublicProfile(user);
+    return user;
   }
 
   signIn(email: string, password: string): Promise<User> {
@@ -28,24 +32,18 @@ export class Api {
   private createAccount(email: string, password: string): Promise<User> {
     return createUserWithEmailAndPassword(auth, email, password).then(
       (userCredential) => {
-        userCredential.user.displayName;
-        this.createPublicProfile(userCredential.user);
         return userCredential.user;
       }
     );
   }
 
-  private updateProfile(name: string): Promise<unknown> {
+  private updateProfile(displayName: string): Promise<unknown> {
     if (!auth.currentUser) {
       return Promise.reject("No user is signed in");
     }
     return updateProfile(auth.currentUser, {
-      displayName: "Jane Q. User",
-    })
-      .then((res) => {
-        return res;
-      })
-      .catch((error) => {});
+      displayName,
+    });
   }
 
   async createPublicProfile(user: User): Promise<PublicUser> {
@@ -57,14 +55,21 @@ export class Api {
       email: user.email!,
     };
 
-    const docRef = await addDoc(collection(db, "public-users"), userInfo);
-    console.log("Document written with ID: ", docRef);
+    await addDoc(collection(db, PUBLIC_USERS_REF), userInfo);
     return userInfo;
   }
-}
 
-type PublicUser = {
-  uid: string;
-  name: string;
-  email: string;
-};
+  async fetchPublicUsers(): Promise<PublicUser[]> {
+    const queryOfDoc = query(
+      collection(db, PUBLIC_USERS_REF),
+      where("uid", "!=", auth.currentUser?.uid)
+    );
+    const querySnapshot = await getDocs(queryOfDoc);
+
+    const publicUsers: PublicUser[] = querySnapshot.docs.map(
+      (doc) => doc.data() as PublicUser
+    );
+
+    return publicUsers;
+  }
+}

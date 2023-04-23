@@ -18,13 +18,6 @@ export const Profile = () => {
         >
           Logout
         </Button>
-        <Button
-          onClick={() => {
-            api.createPublicProfile(user);
-          }}
-        >
-          CreateThing
-        </Button>
       </Stack>
     </Container>
   );
