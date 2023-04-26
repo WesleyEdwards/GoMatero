@@ -1,0 +1,48 @@
+.PinUnfocused {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    background: rebeccapurple;
+    border-radius: 20px 20px 0 20px;
+    transform: rotate(45deg);
+  }
+.PinFocused {
+    position: relative;
+    width: 600px;
+    height: 600px;
+    background: rebeccapurple;
+    border-radius: 300px 300px 0 300px;
+    transform: rotate(45deg);
+  }
+
+  .PinFocused div {
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    width: 65%;
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  .PinUnfocused img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    object-fit:cover;
+  }
+
+  .PinFocused img {
+    top: 30%;
+    left: 40%;
+    width: 80%;
+    height: auto;
+    border-radius: 5px;
+    object-fit:cover;
+  }
