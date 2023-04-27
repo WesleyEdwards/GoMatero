@@ -1,18 +1,21 @@
+import AddIcon from "@mui/icons-material/Add";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
   Box,
-  List,
-  ListItem,
-  Divider,
   Button,
+  Divider,
   Drawer,
   IconButton,
+  Stack,
+  Typography,
 } from "@mui/material";
 import React from "react";
 import { useState } from "react";
+import { AddPlace } from "./AddPlace";
 
 export const SideDrawer = () => {
   const [open, setOpen] = useState(false);
+  const [openCreateEvent, setOpenCreateEvent] = useState(false);
 
   const toggleDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
     event.stopPropagation();
@@ -25,6 +28,11 @@ export const SideDrawer = () => {
     }
 
     setOpen(!open);
+  };
+
+  const handleOpenAddPlace = () => {
+    setOpen(false);
+    setOpenCreateEvent(true); 
   };
 
   return (
@@ -43,13 +51,20 @@ export const SideDrawer = () => {
           onClick={toggleDrawer}
           onKeyDown={toggleDrawer}
         >
-          <List>
-            <ListItem>Friends</ListItem>
-          </List>
-          <Divider />
-          <Button>Add Place</Button>
+          <Stack alignContent="center" gap="2rem" padding="1rem">
+            <Typography>Friends</Typography>
+            <Divider />
+            <Button
+              onClick={handleOpenAddPlace}
+              variant="contained"
+              endIcon={<AddIcon />}
+            >
+              Add Place
+            </Button>
+          </Stack>
         </Box>
       </Drawer>
+      <AddPlace open={openCreateEvent} setOpen={setOpenCreateEvent} />
     </div>
   );
 };

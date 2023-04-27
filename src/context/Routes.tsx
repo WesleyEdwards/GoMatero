@@ -5,6 +5,7 @@ import SignIn from "../components/SignIn";
 import Map from "../components/Map";
 import LandingPage from "../components/LandingPage";
 import { Dashboard } from "../components/Dashboard";
+import { Profile } from "../components/Profile";
 
 export const unAuthRouter = createBrowserRouter([
   {
@@ -26,7 +27,7 @@ export const authRouter = createBrowserRouter([
     children: [
       { path: "home", element: <Map /> },
       { path: "dashboard", element: <Dashboard /> },
-      { path: "profile", element: <div>Profile</div> },
+      { path: "profile", element: <Profile /> },
       { path: "*", element: <Navigate to="home" replace /> },
     ],
   },
