@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { MateSession } from "../utils/models";
 
 export const Pin = (props:MateSession) => {
     const [isFocused, setIsFocused] = useState(false);

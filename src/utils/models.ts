@@ -1,11 +1,11 @@
-type LatLang = {
+export type LatLng = {
   lat: number;
   lng: number;
 };
 
 type UUID = string;
 
-type MateSession = {
+export type MateSession = {
   id: UUID;
   owner: UUID;
   title: string;
@@ -13,7 +13,7 @@ type MateSession = {
   date: Date;
   attendedMembers: UUID[];
   image: string;
-  location: LatLang;
+  location: LatLng;
 };
 
 export type PublicUser = {

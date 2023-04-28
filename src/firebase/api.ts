@@ -5,9 +5,9 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { PUBLIC_USERS_REF, auth, db } from "./firebase_sdk";
+import { MATE_SESSIONS_REF, PUBLIC_USERS_REF, auth, db } from "./firebase_sdk";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-import { PublicUser } from "../utils/models";
+import { MateSession, PublicUser } from "../utils/models";
 
 export class Api {
   async createUser(
@@ -71,5 +71,9 @@ export class Api {
     );
 
     return publicUsers;
+  }
+
+  async addMateSession(session: MateSession): Promise<unknown> {
+    return addDoc(collection(db, MATE_SESSIONS_REF), session);
   }
 }

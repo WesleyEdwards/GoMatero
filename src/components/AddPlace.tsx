@@ -1,5 +1,4 @@
-import { Description } from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
+import { v4 as uuidv4 } from "uuid";
 import {
   Autocomplete,
   Button,
@@ -13,23 +12,52 @@ import {
 } from "@mui/material";
 import { FC, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { PublicUser } from "../utils/models";
+import { LatLng, MateSession, PublicUser } from "../utils/models";
+import { UploadFile } from "./UploadFile";
+import SelectLocationMap from "./SelectLocationMap";
 
 type AddPlaceProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
 };
 export const AddPlace: FC<AddPlaceProps> = (props) => {
-  const { api } = useContext(AuthContext);
+  const { api, user } = useContext(AuthContext);
   const { open, setOpen } = props;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [friends, setFriends] = useState<PublicUser[]>([]);
   const [publicUsers, setPublicUsers] = useState<PublicUser[]>([]);
-  const handleClose = () => setOpen(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [location, setLocation] = useState<LatLng>();
+
+  const isDirty: string | undefined = (() => {
+    if (!imageUrl) return "Please select an image";
+    if (!location) return "Select a location";
+    if (!title) return "Title is required";
+    return undefined;
+  })();
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleSubmit = () => {
-    console.log(friends);
+    if (!imageUrl) return;
+    if (!location) return;
+    const newSession: MateSession = {
+      id: uuidv4(),
+      owner: user.uid,
+      title,
+      date: new Date(),
+      attendedMembers: friends.map((friend) => friend.uid),
+      image: imageUrl,
+      description,
+      location,
+    };
+    api.addMateSession(newSession).then((res) => {
+      console.log(res);
+      handleClose();
+    });
   };
 
   useEffect(() => {
@@ -66,6 +94,8 @@ export const AddPlace: FC<AddPlaceProps> = (props) => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
+            <UploadFile imageUrl={imageUrl} setImageUrl={setImageUrl} />
+            <SelectLocationMap location={location} setLocation={setLocation} />
           </Stack>
         </DialogContent>
         <DialogActions>
@@ -76,7 +106,11 @@ export const AddPlace: FC<AddPlaceProps> = (props) => {
               padding="1rem"
               gap="1rem"
             >
-              <Button variant="contained" onClick={handleSubmit}>
+              <Button
+                variant="contained"
+                disabled={isDirty !== undefined}
+                onClick={handleSubmit}
+              >
                 Submit
               </Button>
             </Stack>

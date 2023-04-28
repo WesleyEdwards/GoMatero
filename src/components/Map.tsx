@@ -1,6 +1,7 @@
 import {GoogleMap, useJsApiLoader, useGoogleMap} from '@react-google-maps/api';
 import { useCallback, useEffect, useState } from 'react';
 import Pin from './Pin';
+import { MateSession } from '../utils/models';
 export const Map = () => {
 
     const { isLoaded } = useJsApiLoader({
