@@ -5,6 +5,7 @@ import {
   Typography,
   AccordionDetails,
   Stack,
+  Divider,
 } from "@mui/material";
 import { MateSession, PublicUser } from "../utils/models";
 import { FC } from "react";
@@ -14,7 +15,7 @@ type MateSessionInfoProps = {
   userList: PublicUser[];
 };
 export const MateSessionInfo: FC<MateSessionInfoProps> = (props) => {
-  const { session } = props;
+  const { session, userList } = props;
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -29,6 +30,14 @@ export const MateSessionInfo: FC<MateSessionInfoProps> = (props) => {
             alt={session.title}
           />
           <Typography>{session.description}</Typography>
+          <Divider />
+          <div>
+            {session.attendedMembers.map((memberId) => (
+              <Typography key={memberId}>
+                - {userList.find((member) => member.uid === memberId)?.name}
+              </Typography>
+            ))}
+          </div>
         </Stack>
       </AccordionDetails>
     </Accordion>

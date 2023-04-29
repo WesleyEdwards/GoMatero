@@ -48,20 +48,21 @@ export const AddPlace: FC<AddPlaceProps> = (props) => {
     setLocation(undefined);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!imageUrl) return;
     if (!location) return;
-    const newSession: MateSession = {
+    const myPublicUser = (await api.publicUsers([user.uid]))[0];
+    const attendedMembers = friends.map((friend) => friend.uid);
+    api.addMateSession({
       id: uuidv4(),
       owner: user.uid,
       title,
       date: new Date().toISOString(),
-      attendedMembers: friends.map((friend) => friend.uid),
+      attendedMembers: [...attendedMembers, myPublicUser.uid],
       image: imageUrl,
       description,
       location,
-    };
-    api.addMateSession(newSession).then((res) => {
+    }).then((res) => {
       handleClose();
     });
   };
