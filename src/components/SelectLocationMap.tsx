@@ -1,8 +1,4 @@
-import {
-  GoogleMap,
-  useJsApiLoader,
-  useGoogleMap,
-} from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, MarkerF } from "@react-google-maps/api";
 import { FC, useEffect, useState } from "react";
 import { LatLng } from "../utils/models";
 import { Spinner } from "./Spinner";
@@ -11,9 +7,11 @@ import { Alert } from "@mui/material";
 type SelectLocationMapProps = {
   location: LatLng | undefined;
   setLocation: (pos: LatLng) => void;
+  width?: number;
 };
+
 export const SelectLocationMap: FC<SelectLocationMapProps> = (props) => {
-  const { location, setLocation } = props;
+  const { location, setLocation, width = 500 } = props;
   const [error, setError] = useState<string>();
   const { isLoaded } = useJsApiLoader({
     id: "goMatero",
@@ -31,7 +29,7 @@ export const SelectLocationMap: FC<SelectLocationMapProps> = (props) => {
         (err) => setError("Please enable location detection.")
       );
     }
-  });
+  }, []);
 
   if (!isLoaded) return <Spinner />;
   if (!location) {
@@ -41,21 +39,28 @@ export const SelectLocationMap: FC<SelectLocationMapProps> = (props) => {
   return (
     <GoogleMap
       mapContainerStyle={{
-        width: "500px",
+        width: `${width}px`,
         height: "500px",
       }}
-      center={{ lat: 41.749837, lng: -111.83216 }}
+      options={{
+        disableDoubleClickZoom: true,
+      }}
       zoom={5}
       onLoad={(map) => {
-        console.log(location);
         const bounds = new window.google.maps.LatLngBounds();
         map.fitBounds(bounds);
         map.panTo(location);
       }}
-      onUnmount={(map) => {
-        // Do nothing for now
+      onDblClick={(e) => {
+        if (!e.latLng) return;
+        setLocation({
+          lat: e.latLng.lat(),
+          lng: e.latLng.lng(),
+        });
       }}
-    />
+    >
+      <MarkerF position={location} />
+    </GoogleMap>
   );
 };
 

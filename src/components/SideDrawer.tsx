@@ -32,7 +32,7 @@ export const SideDrawer = () => {
 
   const handleOpenAddPlace = () => {
     setOpen(false);
-    setOpenCreateEvent(true); 
+    setOpenCreateEvent(true);
   };
 
   return (
