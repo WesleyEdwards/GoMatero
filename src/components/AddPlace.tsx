@@ -57,7 +57,6 @@ export const AddPlace: FC<AddPlaceProps> = (props) => {
       location,
     };
     api.addMateSession(newSession).then((res) => {
-      console.log(res);
       handleClose();
     });
   };
@@ -67,7 +66,7 @@ export const AddPlace: FC<AddPlaceProps> = (props) => {
   }, []);
   return (
     <>
-      <Dialog open={open} onClose={handleClose} fullWidth>
+      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle>Add Place</DialogTitle>
         <DialogContent>
           <Stack padding="1rem" gap="1rem">
