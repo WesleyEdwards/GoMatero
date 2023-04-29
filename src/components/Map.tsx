@@ -12,7 +12,7 @@ export const Map = () => {
         id: "basdflkasjd",
         owner:"thisGuy",
         title:"Test",
-        date: new Date(),
+        date: new Date().toISOString(),
         description: "Example",
         attendedMembers: ["xd","xsdf"],
         image: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.gCPac5sJedHpVMamZ49zFQHaE8%26pid%3DApi&f=1&ipt=9f46a32b5841041dfd9ef3c8c10625e0635f9bcef8260b05ee23cd1100b3f9a4&ipo=images",

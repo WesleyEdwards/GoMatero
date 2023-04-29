@@ -40,7 +40,7 @@ export const Pin = (props:MateSession) => {
             <>
                 <h4>{props.title}</h4>
                 <p>{props.description}</p>
-                <p>{props.date.toISOString()}</p>
+                <p>{new Date(props.date).toISOString()}</p>
                 <p>{props.attendedMembers.map((id) => {id}).join(', ')}</p>
             </>
                 :<></>}

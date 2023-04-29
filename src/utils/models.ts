@@ -10,7 +10,7 @@ export type MateSession = {
   owner: UUID;
   title: string;
   description: string;
-  date: Date;
+  date: string;
   attendedMembers: UUID[];
   image: string;
   location: LatLng;

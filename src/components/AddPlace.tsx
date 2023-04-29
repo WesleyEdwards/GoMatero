@@ -41,6 +41,11 @@ export const AddPlace: FC<AddPlaceProps> = (props) => {
 
   const handleClose = () => {
     setOpen(false);
+    setTitle("");
+    setDescription("");
+    setFriends([]);
+    setImageUrl(null);
+    setLocation(undefined);
   };
 
   const handleSubmit = () => {
@@ -50,7 +55,7 @@ export const AddPlace: FC<AddPlaceProps> = (props) => {
       id: uuidv4(),
       owner: user.uid,
       title,
-      date: new Date(),
+      date: new Date().toISOString(),
       attendedMembers: friends.map((friend) => friend.uid),
       image: imageUrl,
       description,
@@ -117,7 +122,7 @@ export const AddPlace: FC<AddPlaceProps> = (props) => {
                 disabled={isDirty !== undefined}
                 onClick={handleSubmit}
               >
-                Submit
+                Save
               </Button>
             </Stack>
           </FormControl>
