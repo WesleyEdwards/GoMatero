@@ -20,7 +20,7 @@ export const SideDrawer = () => {
 
   const closeDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
     event.stopPropagation();
-    setOpen(!false);
+    setOpen(false);
   };
 
   const handleOpenAddPlace = () => {
@@ -41,12 +41,7 @@ export const SideDrawer = () => {
       </IconButton>
 
       <Drawer anchor={"left"} open={open} onClose={closeDrawer}>
-        <Box
-          sx={{ width: 300 }}
-          role="presentation"
-          onKeyDown={closeDrawer}
-          onClick={closeDrawer}
-        >
+        <Box sx={{ width: 300 }} role="presentation" onKeyDown={closeDrawer}>
           <MyMateSessions onOpenModal={handleOpenAddPlace} />
         </Box>
       </Drawer>
