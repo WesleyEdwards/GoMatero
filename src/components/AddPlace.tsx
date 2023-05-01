@@ -26,8 +26,7 @@ export const AddPlace: FC<AddPlaceProps> = (props) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [friends, setFriends] = useState<PublicUser[]>([]);
-  const [publicUsers, setPublicUsers] = useState<PublicUser[]>([]);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [publicUsers, setPublicUsers] = useState<PublicUser[]>([]);  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [location, setLocation] = useState<LatLng>();
 
   const textFieldRef = useRef<HTMLInputElement>(null);
@@ -53,22 +52,26 @@ export const AddPlace: FC<AddPlaceProps> = (props) => {
     if (!location) return;
     const myPublicUser = (await api.publicUsers([user.uid]))[0];
     const attendedMembers = friends.map((friend) => friend.uid);
-    api.addMateSession({
-      id: uuidv4(),
-      owner: user.uid,
-      title,
-      date: new Date().toISOString(),
-      attendedMembers: [...attendedMembers, myPublicUser.uid],
-      image: imageUrl,
-      description,
-      location,
-    }).then((res) => {
-      handleClose();
-    });
+    api
+      .addMateSession({
+        id: uuidv4(),
+        owner: user.uid,
+        title,
+        date: new Date().toISOString(),
+        attendedMembers: [...attendedMembers, myPublicUser.uid],
+        image: imageUrl,
+        description,
+        location,
+      })
+      .then((res) => {
+        handleClose();
+      });
   };
 
   useEffect(() => {
-    api.fetchPublicUsers().then(setPublicUsers);
+    api.publicUsers().then((users) => {
+      setPublicUsers(users.filter((u) => u.uid !== user.uid));
+    });
   }, []);
   return (
     <>
