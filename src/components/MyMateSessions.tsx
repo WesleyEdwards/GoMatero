@@ -15,7 +15,7 @@ export const MyMateSessions: FC<MyMateSessionsProps> = (props) => {
   const [userList, setUserList] = useState<PublicUser[]>([]);
 
   const fetchSessionsInfo = async () => {
-    const sessions = await api.fetchMateSessions();
+    const sessions = await api.ownedMateSessions();
     const allFriends = sessions.flatMap((session) => session.attendedMembers);
     const friends = await api.publicUsers(allFriends);
     setUserList(friends);

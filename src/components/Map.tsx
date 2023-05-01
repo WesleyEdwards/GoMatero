@@ -8,7 +8,7 @@ export const Map = () => {
     const [sessions, setSessions] = useState<MateSession[]>([]);
     const { api } = useContext(AuthContext);
     useEffect(()=>{
-        api.fetchMateSessions()
+        api.myAttendedSessions()
         .then(sessions => setSessions(sessions))
     },[])
 
@@ -46,7 +46,7 @@ export const Map = () => {
             onUnmount={map => {
                 // Do nothing for now
             }}>{sessions.map((session)=>{
-                return <OverlayView position={session.location} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}><Pin key={session.id} session={session} position={session.location}/></OverlayView>
+                return <OverlayView key={session.id} position={session.location} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}><Pin key={session.id} session={session} position={session.location}/></OverlayView>
             })}</GoogleMap>
             </> ) : <></>
             

@@ -77,10 +77,24 @@ export class Api {
     return addDoc(collection(db, MATE_SESSIONS_REF), session);
   }
 
-  async fetchMateSessions(): Promise<MateSession[]> {
+  async ownedMateSessions(): Promise<MateSession[]> {
     const queryOfDoc = query(
       collection(db, MATE_SESSIONS_REF),
       where("owner", "==", auth.currentUser?.uid)
+    );
+    const querySnapshot = await getDocs(queryOfDoc);
+
+    const mateSessions: MateSession[] = querySnapshot.docs.map(
+      (doc) => doc.data() as MateSession
+    );
+
+    return mateSessions;
+  }
+
+  async myAttendedSessions(): Promise<MateSession[]> {
+    const queryOfDoc = query(
+      collection(db, MATE_SESSIONS_REF),
+      where("attendedMembers", "array-contains", auth.currentUser?.uid)
     );
     const querySnapshot = await getDocs(queryOfDoc);
 
