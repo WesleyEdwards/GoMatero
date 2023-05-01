@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { MateSession } from "../utils/models";
 
 export const Pin = (props:MateSession) => {
     const [isFocused, setIsFocused] = useState(false);
@@ -39,7 +40,7 @@ export const Pin = (props:MateSession) => {
             <>
                 <h4>{props.title}</h4>
                 <p>{props.description}</p>
-                <p>{props.date.toISOString()}</p>
+                <p>{new Date(props.date).toISOString()}</p>
                 <p>{props.attendedMembers.map((id) => {id}).join(', ')}</p>
             </>
                 :<></>}

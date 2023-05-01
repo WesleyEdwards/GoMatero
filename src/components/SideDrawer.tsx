@@ -12,56 +12,37 @@ import {
 import React from "react";
 import { useState } from "react";
 import { AddPlace } from "./AddPlace";
+import { MyMateSessions } from "./MyMateSessions";
 
 export const SideDrawer = () => {
   const [open, setOpen] = useState(false);
   const [openCreateEvent, setOpenCreateEvent] = useState(false);
 
-  const toggleDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
+  const closeDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
     event.stopPropagation();
-    if (
-      event.type === "keydown" &&
-      ((event as React.KeyboardEvent).key === "Tab" ||
-        (event as React.KeyboardEvent).key === "Shift")
-    ) {
-      return;
-    }
-
-    setOpen(!open);
+    setOpen(false);
   };
 
   const handleOpenAddPlace = () => {
     setOpen(false);
-    setOpenCreateEvent(true); 
+    setOpenCreateEvent(true);
   };
 
   return (
     <div>
       <IconButton
         sx={{ width: "3rem", height: "3rem", margin: "1rem" }}
-        onClick={toggleDrawer}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen(true);
+        }}
       >
         <MenuIcon fontSize="large" />
       </IconButton>
 
-      <Drawer anchor={"left"} open={open} onClose={toggleDrawer}>
-        <Box
-          sx={{ width: 250 }}
-          role="presentation"
-          onClick={toggleDrawer}
-          onKeyDown={toggleDrawer}
-        >
-          <Stack alignContent="center" gap="2rem" padding="1rem">
-            <Typography>Friends</Typography>
-            <Divider />
-            <Button
-              onClick={handleOpenAddPlace}
-              variant="contained"
-              endIcon={<AddIcon />}
-            >
-              Add Place
-            </Button>
-          </Stack>
+      <Drawer anchor={"left"} open={open} onClose={closeDrawer}>
+        <Box sx={{ width: 300 }} role="presentation" onKeyDown={closeDrawer}>
+          <MyMateSessions onOpenModal={handleOpenAddPlace} />
         </Box>
       </Drawer>
       <AddPlace open={openCreateEvent} setOpen={setOpenCreateEvent} />
