@@ -59,20 +59,6 @@ export class Api {
     return userInfo;
   }
 
-  async fetchPublicUsers(): Promise<PublicUser[]> {
-    const queryOfDoc = query(
-      collection(db, PUBLIC_USERS_REF),
-      where("uid", "!=", auth.currentUser?.uid)
-    );
-    const querySnapshot = await getDocs(queryOfDoc);
-
-    const publicUsers: PublicUser[] = querySnapshot.docs.map(
-      (doc) => doc.data() as PublicUser
-    );
-
-    return publicUsers;
-  }
-
   async addMateSession(session: MateSession): Promise<unknown> {
     return addDoc(collection(db, MATE_SESSIONS_REF), session);
   }
@@ -105,11 +91,11 @@ export class Api {
     return mateSessions;
   }
 
-  async publicUsers(users: string[]): Promise<PublicUser[]> {
-    const queryOfDoc = query(
-      collection(db, PUBLIC_USERS_REF),
-      where("uid", "in", users)
-    );
+  async publicUsers(users?: string[]): Promise<PublicUser[]> {
+    const queryOfDoc = users
+      ? query(collection(db, PUBLIC_USERS_REF), where("uid", "in", users))
+      : query(collection(db, PUBLIC_USERS_REF));
+
     const querySnapshot = await getDocs(queryOfDoc);
 
     const publicUsers: PublicUser[] = querySnapshot.docs.map(

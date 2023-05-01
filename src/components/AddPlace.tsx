@@ -21,7 +21,7 @@ type AddPlaceProps = {
   setOpen: (open: boolean) => void;
 };
 export const AddPlace: FC<AddPlaceProps> = (props) => {
-  const { api, user } = useContext(AuthContext);
+  const { api, user, refreshMyAttended } = useContext(AuthContext);
   const { open, setOpen } = props;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -48,26 +48,32 @@ export const AddPlace: FC<AddPlaceProps> = (props) => {
     setLocation(undefined);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!imageUrl) return;
     if (!location) return;
-    const newSession: MateSession = {
-      id: uuidv4(),
-      owner: user.uid,
-      title,
-      date: new Date().toISOString(),
-      attendedMembers: friends.map((friend) => friend.uid),
-      image: imageUrl,
-      description,
-      location,
-    };
-    api.addMateSession(newSession).then((res) => {
-      handleClose();
-    });
+    const myPublicUser = (await api.publicUsers([user.uid]))[0];
+    const attendedMembers = friends.map((friend) => friend.uid);
+    api
+      .addMateSession({
+        id: uuidv4(),
+        owner: user.uid,
+        title,
+        date: new Date().toISOString(),
+        attendedMembers: [...attendedMembers, myPublicUser.uid],
+        image: imageUrl,
+        description,
+        location,
+      })
+      .then((res) => {
+        refreshMyAttended();
+        handleClose();
+      });
   };
 
   useEffect(() => {
-    api.fetchPublicUsers().then(setPublicUsers);
+    api.publicUsers().then((users) => {
+      setPublicUsers(users.filter((u) => u.uid !== user.uid));
+    });
   }, []);
   return (
     <>

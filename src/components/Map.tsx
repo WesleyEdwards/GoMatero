@@ -5,12 +5,7 @@ import { MateSession } from '../utils/models';
 import { AuthContext } from '../context/AuthContext';
 export const Map = () => {
 
-    const [sessions, setSessions] = useState<MateSession[]>([]);
-    const { api } = useContext(AuthContext);
-    useEffect(()=>{
-        api.myAttendedSessions()
-        .then(sessions => setSessions(sessions))
-    },[])
+    const { myAttended: sessions } = useContext(AuthContext);
 
     const { isLoaded } = useJsApiLoader({
         id: 'goMatero',

@@ -25,7 +25,6 @@ export const UploadFile = (props: UploadFileProps) => {
     const downloadUrl = await getDownloadURL(
       ref(storage, `/user-files/${file.name}`)
     );
-    console.log("The download URL is: ", downloadUrl);
     setImageUrl(downloadUrl);
     setUploading(false);
   }
