@@ -1,23 +1,22 @@
-import {GoogleMap, useJsApiLoader, useGoogleMap} from '@react-google-maps/api';
-import { useCallback, useEffect, useState } from 'react';
+import {GoogleMap, useJsApiLoader, useGoogleMap, OverlayView} from '@react-google-maps/api';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import Pin from './Pin';
 import { MateSession } from '../utils/models';
+import { AuthContext } from '../context/AuthContext';
 export const Map = () => {
+
+    const [sessions, setSessions] = useState<MateSession[]>([]);
+    const { api } = useContext(AuthContext);
+    useEffect(()=>{
+        api.fetchMateSessions()
+        .then(sessions => setSessions(sessions))
+    },[])
 
     const { isLoaded } = useJsApiLoader({
         id: 'goMatero',
         googleMapsApiKey: import.meta.env.VITE_MAPS_API_KEY
     })
-    const ex:MateSession = {
-        id: "basdflkasjd",
-        owner:"thisGuy",
-        title:"Test",
-        date: new Date().toISOString(),
-        description: "Example",
-        attendedMembers: ["xd","xsdf"],
-        image: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.gCPac5sJedHpVMamZ49zFQHaE8%26pid%3DApi&f=1&ipt=9f46a32b5841041dfd9ef3c8c10625e0635f9bcef8260b05ee23cd1100b3f9a4&ipo=images",
-        location: {lat:0, lng:0}
-    }
+
     return ( isLoaded ? (
         <>
         <GoogleMap
@@ -46,8 +45,9 @@ export const Map = () => {
                 }}
             onUnmount={map => {
                 // Do nothing for now
-            }}></GoogleMap>
-            <Pin {...ex}></Pin>
+            }}>{sessions.map((session)=>{
+                return <OverlayView position={session.location} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}><Pin key={session.id} session={session} position={session.location}/></OverlayView>
+            })}</GoogleMap>
             </> ) : <></>
             
     )

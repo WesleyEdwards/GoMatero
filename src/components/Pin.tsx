@@ -1,26 +1,29 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { MateSession } from "../utils/models";
+import { LatLng, MateSession } from "../utils/models";
 
-export const Pin = (props:MateSession) => {
+type PinProps = {
+    session:MateSession,
+    position:LatLng
+}
+
+export const Pin = ({session, position}:PinProps) => {
     const [isFocused, setIsFocused] = useState(false);
     const { api } = useContext(AuthContext);
     const pinRef = useRef<HTMLDivElement>(null);
+    const [members,setMembers] = useState("");
 
-    const unfocusedPinStyle = {
-        position: "relative",
-        width: "20px",
-        height: "30px",
-        background: "red",
-        border_radius: "10px 10px 0 0",
-        transform: "rotate(45deg)",
-    };
-    const pinImageStyle = {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%) rotate(-45deg)"
-    }
+    useEffect(() => {
+        api.publicUsers(session.attendedMembers)
+        .then(users => {
+            var res = "";
+            users.forEach(user => {
+                res += user.name + " ";
+            });
+            setMembers(res)
+        })
+    },[])
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (pinRef.current && !pinRef.current.contains(event.target as Node)) {
@@ -35,13 +38,13 @@ export const Pin = (props:MateSession) => {
     return (
         <div className={isFocused ? 'PinFocused':'PinUnfocused'} ref={pinRef} onClick={()=>setIsFocused(true)}>
             <div>
-            <img src={props.image} alt={props.title}/>
+            <img src={session.image} alt={session.title}/>
             {isFocused?
             <>
-                <h4>{props.title}</h4>
-                <p>{props.description}</p>
-                <p>{new Date(props.date).toISOString()}</p>
-                <p>{props.attendedMembers.map((id) => {id}).join(', ')}</p>
+                <h4>{session.title}</h4>
+                <p>{session.description}</p>
+                <p>{session.date}</p>
+                <p>{members}</p>
             </>
                 :<></>}
             </div>
