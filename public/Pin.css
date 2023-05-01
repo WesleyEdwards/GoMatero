@@ -4,14 +4,15 @@
     height: 40px;
     background: rebeccapurple;
     border-radius: 20px 20px 0 20px;
-    transform: rotate(45deg);
+    transform: translate(-50%,-100%) rotate(45deg);
   }
 .PinFocused {
     position: relative;
     width: 600px;
     height: 600px;
     background: rebeccapurple;
-    border-radius:  0 300px 300px 300px;
+    border-radius: 300px 300px 0 300px;
+    transform: translate(-50%,-120%) rotate(45deg);
   }
 
   .PinFocused div {
@@ -19,7 +20,7 @@
     text-align: center;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) rotate(-45deg);
     width: 65%;
     background: white;
     padding: 10px;
