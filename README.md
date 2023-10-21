@@ -6,3 +6,7 @@ This app is an easy way to keep a record of our mate drinking activity.
 
 
 This project is hosted at https://gomatero-ad49d.web.app/
+
+
+
+![Screenshot from 2023-10-21 16-40-53](https://github.com/WesleyEdwards/GoMatero/assets/97990557/2448de06-9539-4554-8aca-826ae22f66bb)
